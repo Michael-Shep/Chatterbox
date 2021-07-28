@@ -1,9 +1,17 @@
 import './App.css';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
-function App() {
+import Login from './components/Login';
+
+const App = () => {
   return (
     <div>
-      Welcome to Chatterbox
+      <BrowserRouter>
+      <Switch>
+        <Route exact path="/"> <Redirect to="/login" /> </Route>
+        <Route path="/login"> <Login /> </Route>
+      </Switch>
+      </BrowserRouter>
     </div>
   );
 }
