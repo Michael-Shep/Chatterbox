@@ -22,3 +22,11 @@ h1 {
   padding-left: 50px;
   padding-right: 50px;
 }
+
+.inputToolTip {
+  cursor: default;
+}
+
+.helperTextColor {
+  color: blue !important;
+}
