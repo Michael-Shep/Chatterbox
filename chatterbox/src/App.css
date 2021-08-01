@@ -28,5 +28,13 @@ h1 {
 }
 
 .helperTextColor {
-  color: blue !important;
+  color: darkred !important;
+}
+
+.errorText {
+  color: darkred;
+}
+
+.successText {
+  color: darkgreen;
 }

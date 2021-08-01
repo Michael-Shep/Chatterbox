@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
-import "firebase/auth";
+import { useHistory } from 'react-router-dom';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
@@ -7,6 +9,9 @@ import Button from '@material-ui/core/Button';
 import InfoIcon from '@material-ui/icons/Info';
 import Tooltip from '@material-ui/core/Tooltip';
 import { InputAdornment } from '@material-ui/core';
+
+const emailRegex = new RegExp(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
+const passwordRegex = new RegExp(/^(?=[a-zA-Z_]*\d)(?=[0-9_]*[a-zA-Z])[a-zA-Z0-9_]{8,}$/);
 
 const SignUp = () => {
     const [email, setEmail] = useState("");
@@ -16,9 +21,9 @@ const SignUp = () => {
     const [validEmail, setValidEmail] = useState(true);
     const [validPassword, setValidPassword] = useState(true);
     const [validConfirmPassword, setValidConfirmPassword] = useState(true);
+    const [errorText, setErrorText] = useState('');
 
-    const emailRegex = new RegExp(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
-    const passwordRegex = new RegExp(/^(?=[a-zA-Z_]*\d)(?=[0-9_]*[a-zA-Z])[a-zA-Z0-9_]{8,}$/);
+    const history = useHistory();
 
     const performValidationWithRegex = (regex, testStr, isValidFunction) => {
         if (!regex.test(testStr)) {
@@ -48,15 +53,25 @@ const SignUp = () => {
         else {
             setValidConfirmPassword(false);
         }
-    }, [confirmPassword]);
+    }, [confirmPassword, password]);
 
     const signUpButtonHandler = () => {
-        console.log(`Email: ${email}, Password: ${password}, Confirm Password: ${confirmPassword}`);
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then(() => {
+                history.push('/login?userCreated=true');
+            })
+            .catch((error) => {
+                if (error.message) {
+                    setErrorText(error.message);
+                } else {
+                    setErrorText('User could not be created');
+                }
+            });
     };
 
     const shouldSubmitBeDisabled = () => {
         return !validEmail || email.length === 0 || !validPassword || password.length === 0 || 
-                            !validConfirmPassword || validConfirmPassword.length === 0;
+                            !validConfirmPassword || confirmPassword.length === 0;
     };
 
     const createFormElement = (labelString, value, setterFunction, tooltipString, validInput, errorString, inputType='text') => {
@@ -84,6 +99,9 @@ const SignUp = () => {
             <div className="formBox">
                 <h1>Chatterbox</h1>
                 <Box mt={-5}> <h3>Create New User</h3> </Box>
+                { errorText !== '' &&
+                    <p className="errorText">{errorText}</p>
+                }
                 <form className="formPadding">
                     {createFormElement('Email', email, setEmail, 'Must be standard email format e.g. example@example.com',
                                         validEmail, 'Input must be a valid email')}
@@ -91,11 +109,15 @@ const SignUp = () => {
                                         validPassword, 'At least 8 characters, 1 digit and 1 letter', 'password')}
                     {createFormElement('Confirm Password', confirmPassword, setConfirmPassword, 'Passwords must match',
                                         validConfirmPassword,'Passwords must match', 'password')}
-                    <Box mb={3}> 
+                    <Box mb={4}></Box>
+                    <Box mb={2}> 
                         <Button variant="contained" className="loginButton" onClick={signUpButtonHandler}
                                 disabled={shouldSubmitBeDisabled()}>
                             Sign Up
                         </Button> 
+                    </Box>
+                    <Box mb={3}> 
+                        <Button color="primary" className="loginButton" href="/login">Back to Login</Button> 
                     </Box>
                 </form>
             </div>

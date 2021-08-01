@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom'; 
 
 import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
@@ -8,6 +9,8 @@ const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
+    const userCreated = new URLSearchParams(useLocation().search).get('userCreated');
+
     const loginButtonHandler = () => {
         console.log(`Username: ${username}, Password: ${password}`);
     };
@@ -16,6 +19,11 @@ const Login = () => {
         <div className="centerContainer">
             <div className="formBox">
                 <h1>Chatterbox</h1>
+                { userCreated === 'true' &&
+                    <Box mt={-3}>
+                        <p className="successText"> User Successfully Created </p>
+                    </Box>
+                }
                 <form className="formPadding">
                     <Box mb={2}> 
                         <TextField fullWidth label="Email" variant="filled" 
