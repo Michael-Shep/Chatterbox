@@ -1,18 +1,35 @@
-import { useState } from 'react';
-import { useLocation } from 'react-router-dom'; 
+import { useState, useEffect } from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
+
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 
-const Login = () => {
-    const [username, setUsername] = useState("");
+const Login = ({ userCredentials, setUserCredentials }) => {
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     const userCreated = new URLSearchParams(useLocation().search).get('userCreated');
+    const history = useHistory();
+
+    useEffect(() => {
+        if (userCredentials !== '') {
+            history.push('/home');
+        }
+    }, [userCredentials, history]);
 
     const loginButtonHandler = () => {
-        console.log(`Username: ${username}, Password: ${password}`);
+        firebase.auth().signInWithEmailAndPassword(email, password)
+            .then((userCredentials) => {
+                setUserCredentials(userCredentials);
+            })
+            .catch((error) => {
+                console.log('Error');
+                console.log(error);
+            });
     };
 
     return (
@@ -27,7 +44,7 @@ const Login = () => {
                 <form className="formPadding">
                     <Box mb={2}> 
                         <TextField fullWidth label="Email" variant="filled" 
-                                   value={username} onChange={(e) => setUsername(e.target.value)} /> 
+                                   value={email} onChange={(e) => setEmail(e.target.value)} /> 
                     </Box>
                     <Box mb={4} > 
                         <TextField fullWidth label="Password" variant="filled" type="password" 
