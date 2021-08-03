@@ -8,27 +8,30 @@ import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 
+let loginButtonPressed = false;
+
 const Login = ({ userCredentials, setUserCredentials }) => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [errorText, setErrorText] = useState('');
 
     const userCreated = new URLSearchParams(useLocation().search).get('userCreated');
     const history = useHistory();
 
     useEffect(() => {
-        if (userCredentials !== '') {
+        if (loginButtonPressed) {
             history.push('/home');
         }
     }, [userCredentials, history]);
 
     const loginButtonHandler = () => {
+        loginButtonPressed = true;
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then((userCredentials) => {
                 setUserCredentials(userCredentials);
             })
-            .catch((error) => {
-                console.log('Error');
-                console.log(error);
+            .catch(() => {
+                setErrorText('Login Failed');
             });
     };
 
@@ -39,6 +42,11 @@ const Login = ({ userCredentials, setUserCredentials }) => {
                 { userCreated === 'true' &&
                     <Box mt={-3}>
                         <p className="successText"> User Successfully Created </p>
+                    </Box>
+                }
+                { errorText !== '' &&
+                    <Box mt={-5}>
+                        <p className="errorText">{errorText}</p>
                     </Box>
                 }
                 <form className="formPadding">

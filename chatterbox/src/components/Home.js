@@ -1,7 +1,22 @@
+import { useHistory } from 'react-router-dom';
 
-const Home = () => {
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+
+const Home = ({ setUserCredentials }) => {
+    const history = useHistory();
+
+    const exitButtonHandler = () => {
+        setUserCredentials('');
+        history.push('/login');
+    };
+
     return (
-        <div>This is the home page</div>
+        <div>
+            <div className="toolbar">
+                <h1 id="toolbarText">Chatterbox</h1>
+                <ExitToAppIcon id="exitIcon" onClick={exitButtonHandler} fontSize="large"/>
+            </div>
+        </div>
     );
 };
 

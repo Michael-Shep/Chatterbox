@@ -38,3 +38,29 @@ h1 {
 .successText {
   color: darkgreen;
 }
+
+.toolbar {
+  width: 100vw;
+  height: 75px;
+  background-color: coral;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#toolbarText {
+  margin-left: 20px;
+}
+
+#exitIcon {
+  margin-left: auto;
+  margin-right: 20px;
+}
+
+#exitIcon:hover {
+  opacity: 0.6;
+}
+
+#exitIcon:active {
+  transform: scale(0.9);
+}
