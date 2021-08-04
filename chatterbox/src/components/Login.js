@@ -21,6 +21,7 @@ const Login = ({ userCredentials, setUserCredentials }) => {
     useEffect(() => {
         if (loginButtonPressed) {
             history.push('/home');
+            loginButtonPressed = false;
         }
     }, [userCredentials, history]);
 

@@ -1,8 +1,9 @@
 import { useHistory } from 'react-router-dom';
 
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import ChatsList from './ChatsList';
 
-const Home = ({ setUserCredentials }) => {
+const Home = ({ userCredentials, setUserCredentials }) => {
     const history = useHistory();
 
     const exitButtonHandler = () => {
@@ -11,11 +12,15 @@ const Home = ({ setUserCredentials }) => {
     };
 
     return (
-        <div>
+        <div className="screenContainer">
             <div className="toolbar">
                 <h1 id="toolbarText">Chatterbox</h1>
                 <ExitToAppIcon id="exitIcon" onClick={exitButtonHandler} fontSize="large"/>
             </div>
+            <div id="usernameDisplay">
+                <h2>{userCredentials.user.email}</h2>
+            </div>
+            <ChatsList userCredentials={userCredentials} />
         </div>
     );
 };

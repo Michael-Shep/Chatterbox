@@ -16,7 +16,7 @@ const App = () => {
         <Route exact path="/"> <Redirect to="/login" /> </Route>
         <Route path="/login"> <Login userCredentials={userCredentials} setUserCredentials={setUserCredentials} /> </Route>
         <Route path="/signup"> <SignUp /> </Route>
-        <Route path="/home"> <Home setUserCredentials={setUserCredentials} /> </Route>
+        <Route path="/home"> <Home userCredentials={userCredentials} setUserCredentials={setUserCredentials} /> </Route>
       </Switch>
       </BrowserRouter>
     </div>
