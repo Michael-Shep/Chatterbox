@@ -1,13 +1,23 @@
 import './App.css';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import Login from './components/Login';
 import SignUp from './components/SignUp';
 import Home from './components/Home';
 
+import firebase from 'firebase/app';
+import 'firebase/auth';
+
 const App = () => {
   const [userCredentials, setUserCredentials] = useState('');
+
+  useEffect(() => {
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
+    firebase.auth().onAuthStateChanged((user) => {
+      setUserCredentials(user);
+    });
+  }, []);
 
   return (
     <div>

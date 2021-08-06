@@ -3,10 +3,12 @@ import { useState, useEffect } from "react";
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+
 const ChatsList = ({ userCredentials }) => {
     const db = firebase.firestore();
     const [chats, setChats] = useState([]);
-    const userEmail = userCredentials.user.email;
+    const userEmail = userCredentials.email;
 
     useEffect(() => {
         db.collection("chats").where('participants', 'array-contains', userEmail).get()
@@ -23,13 +25,26 @@ const ChatsList = ({ userCredentials }) => {
         });
     }, [db, userEmail]);
 
-    useEffect(() => {
-        console.log(chats);
-    }, [chats]);
+    const getMessageReciever = (chatObject) => {
+        if (chatObject.participants[0] === userEmail) {
+            return chatObject.participants[1];
+        } else {
+            return chatObject.participants[0];
+        }
+    }
+
+    const chatObjectHandler = (chatObject) => {
+        console.log('Chat object clicked');
+    }
 
     return (
         <div id="chatListContainer">
-            This is the chat list
+            { chats.map((chat, index) => (
+                <div key={index} className='chatDisplay' onClick={chatObjectHandler}> 
+                    <span> {getMessageReciever(chat)} </span>
+                    <ArrowForwardIosIcon />
+                </div>
+            )) }
         </div>
     );
 };

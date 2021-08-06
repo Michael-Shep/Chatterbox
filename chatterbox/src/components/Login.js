@@ -25,15 +25,19 @@ const Login = ({ userCredentials, setUserCredentials }) => {
         }
     }, [userCredentials, history]);
 
+    useEffect(() => {
+        setUserCredentials({});
+        firebase.auth().signOut().catch((error) => {
+            console.log('An Error Occurred when signing out the current user');
+        });
+    }, [setUserCredentials]);
+
     const loginButtonHandler = () => {
         loginButtonPressed = true;
         firebase.auth().signInWithEmailAndPassword(email, password)
-            .then((userCredentials) => {
-                setUserCredentials(userCredentials);
-            })
-            .catch(() => {
-                setErrorText('Login Failed');
-            });
+        .catch(() => {
+            setErrorText('Login Failed');
+        });
     };
 
     return (

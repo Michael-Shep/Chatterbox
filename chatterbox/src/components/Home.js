@@ -7,7 +7,6 @@ const Home = ({ userCredentials, setUserCredentials }) => {
     const history = useHistory();
 
     const exitButtonHandler = () => {
-        setUserCredentials('');
         history.push('/login');
     };
 
@@ -17,10 +16,14 @@ const Home = ({ userCredentials, setUserCredentials }) => {
                 <h1 id="toolbarText">Chatterbox</h1>
                 <ExitToAppIcon id="exitIcon" onClick={exitButtonHandler} fontSize="large"/>
             </div>
-            <div id="usernameDisplay">
-                <h2>{userCredentials.user.email}</h2>
-            </div>
-            <ChatsList userCredentials={userCredentials} />
+            { userCredentials &&
+                <div>
+                    <div id="usernameDisplay">
+                        <h2>{userCredentials.email}</h2>
+                    </div>
+                    <ChatsList userCredentials={userCredentials} />
+                </div>
+            }
         </div>
     );
 };
