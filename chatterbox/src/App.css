@@ -65,7 +65,7 @@ h1 {
   transform: scale(0.9);
 }
 
-#chatListContainer {
+.halfScreenContainer {
   width: 50vw;
   height: 100%;
 }
@@ -75,20 +75,50 @@ h1 {
   height: 100vh;
 }
 
+#contentContainer {
+  width: 100%;
+  height: calc(100% - 75px);
+}
+
 #usernameDisplay {
   display: flex;
+  height: 75px;
   justify-content: center;
+  align-items: center;
+}
+
+#chatsContainer {
+  display: flex;
+  height: calc(100% - 75px);
 }
 
 .chatDisplay {
-  width: 100%;
   height: 40px;
   border: 3px solid black;
   margin-bottom: -3px;
-  padding: 10px;
   font-weight: bolder;
   display: flex;
   align-items: center;
   justify-content: space-between;
   cursor: pointer
+}
+
+.selectedChat {
+  color: blue;
+  font-size: 24px;
+}
+
+.messageView {
+  height: calc(100% - 6px);
+  border: 3px solid black;
+  margin-left: -3px;
+}
+
+.paddedObject {
+  width: 100% - 20px;
+  padding: 10px;
+}
+
+.centerText {
+  text-align: center;
 }

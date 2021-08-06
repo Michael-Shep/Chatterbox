@@ -5,7 +5,7 @@ import 'firebase/firestore';
 
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 
-const ChatsList = ({ userCredentials }) => {
+const ChatsList = ({ userCredentials, selectedChatObject, setSelectedChatObject }) => {
     const db = firebase.firestore();
     const [chats, setChats] = useState([]);
     const userEmail = userCredentials.email;
@@ -15,7 +15,9 @@ const ChatsList = ({ userCredentials }) => {
         .then((querySnapshot) => {
             let documents = [];
             querySnapshot.forEach((doc) => {
-                documents.push(doc.data());
+                let documentObject = doc.data();
+                documentObject.id = doc.id;
+                documents.push(documentObject);
             });
             setChats(documents);
         })
@@ -33,14 +35,12 @@ const ChatsList = ({ userCredentials }) => {
         }
     }
 
-    const chatObjectHandler = (chatObject) => {
-        console.log('Chat object clicked');
-    }
-
     return (
-        <div id="chatListContainer">
+        <div className="halfScreenContainer">
             { chats.map((chat, index) => (
-                <div key={index} className='chatDisplay' onClick={chatObjectHandler}> 
+                <div key={index} 
+                    className={`chatDisplay paddedObject ${selectedChatObject === chat ? 'selectedChat': ''}`}
+                    onClick={() => setSelectedChatObject(chat)}> 
                     <span> {getMessageReciever(chat)} </span>
                     <ArrowForwardIosIcon />
                 </div>
