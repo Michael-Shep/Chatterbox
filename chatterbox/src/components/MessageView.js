@@ -1,9 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 
 const MessageView = ({ userCredentials, selectedChatObject }) => {
+    const [messages, setMessages] = useState([]);
+
     const db = firebase.firestore();
     const userEmail = userCredentials.email;
 
@@ -19,12 +21,24 @@ const MessageView = ({ userCredentials, selectedChatObject }) => {
         if (Object.keys(selectedChatObject).length !== 0) {
             db.collection('chats').doc(selectedChatObject.id).collection('messages').get()
                 .then((querySnapshot) => {
+                    let messageData = [];
                     querySnapshot.forEach(doc => {
-                        console.log(doc.data());
-                    })
+                        messageData.push(doc.data());
+                    });
+                    setMessages(messageData);
                 });
         }
     }, [db, selectedChatObject]);
+
+    const getMessageAlignmentClass = (message, forContainer) => {
+        if (message.from === userEmail) {
+            if (forContainer) return 'rightAlignedContainer';
+            else return 'rightAlignedBubble';
+        } else {
+            if (forContainer) return 'leftAlignedContainer';
+            else return 'leftAlignedBubble';
+        }
+    };
 
     return (
         <div className="halfScreenContainer messageView">
@@ -37,6 +51,13 @@ const MessageView = ({ userCredentials, selectedChatObject }) => {
             { Object.keys(selectedChatObject).length !== 0 &&
                 <div className="paddedObject">
                     <h2 className="centerText"> {getMessageReciever(selectedChatObject)} </h2>
+                    {
+                        messages.map((message, index) => (
+                            <div key={index} className={`${getMessageAlignmentClass(message, true)}`}>
+                                <div className={`messageBubble ${getMessageAlignmentClass(message, false)}`}>{message.content}</div>
+                            </div>
+                        ))
+                    }
                 </div>
             }
         </div>

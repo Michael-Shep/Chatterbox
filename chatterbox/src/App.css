@@ -122,3 +122,30 @@ h1 {
 .centerText {
   text-align: center;
 }
+
+.leftAlignedContainer {
+  color: white;
+  display: flex;
+}
+
+.leftAlignedBubble {
+  background-color: gray;
+}
+
+.rightAlignedBubble {
+  background-color: coral;
+}
+
+.rightAlignedContainer {
+  color: white;
+  display: flex;
+  justify-content: flex-end;
+  bottom: 10px;
+}
+
+.messageBubble {
+  border-radius: 3px;
+  padding: 5px;
+  width: 50%;
+  margin-bottom: 10px;
+}
