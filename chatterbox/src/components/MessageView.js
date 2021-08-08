@@ -24,10 +24,10 @@ const MessageView = ({ userCredentials, selectedChatObject }) => {
 
     useEffect(() => {
         setMessages([]);
-        db.collection('chats').doc(selectedChatObject.id).collection('messages').onSnapshot(querySnapshot => {
+        db.collection('chats').doc(selectedChatObject.id).collection('messages').orderBy('time')
+            .onSnapshot(querySnapshot => {
             let messageData = [];
             querySnapshot.docChanges().forEach((change) => {
-                console.log(change);
                 if (change.type === 'added') {
                     messageData.push(change.doc.data());
                 }
@@ -50,7 +50,8 @@ const MessageView = ({ userCredentials, selectedChatObject }) => {
         if (newMessage.length > 0) {
             db.collection('chats').doc(selectedChatObject.id).collection('messages').doc().set({
                 content: newMessage,
-                from: userEmail
+                from: userEmail,
+                time: Date.now()
             })
             .then(() => {
                 setNewMessage('');
