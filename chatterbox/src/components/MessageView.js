@@ -23,16 +23,17 @@ const MessageView = ({ userCredentials, selectedChatObject }) => {
     }
 
     useEffect(() => {
-        if (Object.keys(selectedChatObject).length !== 0) {
-            db.collection('chats').doc(selectedChatObject.id).collection('messages').get()
-                .then((querySnapshot) => {
-                    let messageData = [];
-                    querySnapshot.forEach(doc => {
-                        messageData.push(doc.data());
-                    });
-                    setMessages(messageData);
-                });
-        }
+        setMessages([]);
+        db.collection('chats').doc(selectedChatObject.id).collection('messages').onSnapshot(querySnapshot => {
+            let messageData = [];
+            querySnapshot.docChanges().forEach((change) => {
+                console.log(change);
+                if (change.type === 'added') {
+                    messageData.push(change.doc.data());
+                }
+            });
+            setMessages(prevMessages => prevMessages.concat(messageData));
+        });
     }, [db, selectedChatObject]);
 
     const getMessageAlignmentClass = (message, forContainer) => {
