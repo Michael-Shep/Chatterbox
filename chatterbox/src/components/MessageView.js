@@ -81,8 +81,7 @@ const MessageView = ({ userCredentials, selectedChatObject }) => {
                     <span>Select one of the chats to view messages here</span>
                 </div>
             }
-            {
-                Object.keys(selectedChatObject).length !== 0 &&
+            { Object.keys(selectedChatObject).length !== 0 &&
                 <h2 className="centerText"> {getMessageReciever(selectedChatObject)} </h2>
             }
             { Object.keys(selectedChatObject).length !== 0 &&
