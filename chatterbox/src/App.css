@@ -111,11 +111,14 @@ h1 {
 .messageView {
   height: calc(100% - 6px);
   border: 3px solid black;
-  margin-left: -3px;
+  margin-left: -6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .paddedObject {
-  width: 100% - 20px;
+  width: calc(100% - 30px);
   padding: 10px;
 }
 
@@ -148,4 +151,8 @@ h1 {
   padding: 5px;
   width: 50%;
   margin-bottom: 10px;
+}
+
+.sendButton {
+  cursor: pointer;
 }

@@ -3,8 +3,13 @@ import { useEffect, useState } from 'react';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 
+import TextField from '@material-ui/core/TextField';
+import { InputAdornment } from '@material-ui/core';
+import SendIcon from '@material-ui/icons/Send';
+
 const MessageView = ({ userCredentials, selectedChatObject }) => {
     const [messages, setMessages] = useState([]);
+    const [newMessage, setNewMessage] = useState('');
 
     const db = firebase.firestore();
     const userEmail = userCredentials.email;
@@ -40,6 +45,32 @@ const MessageView = ({ userCredentials, selectedChatObject }) => {
         }
     };
 
+    const sendMessage = () => {
+        if (newMessage.length > 0) {
+            db.collection('chats').doc(selectedChatObject.id).collection('messages').doc().set({
+                content: newMessage,
+                from: userEmail
+            })
+            .then(() => {
+                setNewMessage('');
+            })
+            .catch((error) => {
+                console.log('Error occurred when sending message');
+                console.log(error);
+            })
+        }
+    };
+
+    const handleTyping = (event) => {
+        if (event.nativeEvent.inputType === 'insertText' ||
+            event.nativeEvent.inputType === 'deleteContentBackward') {
+            setNewMessage(event.target.value);
+        }
+        else if (event.nativeEvent.inputType === 'insertLineBreak') {
+            sendMessage();
+        }
+    }
+
     return (
         <div className="halfScreenContainer messageView">
             { Object.keys(selectedChatObject).length === 0 &&
@@ -58,6 +89,19 @@ const MessageView = ({ userCredentials, selectedChatObject }) => {
                             </div>
                         ))
                     }
+
+                </div>
+            }
+            { Object.keys(selectedChatObject).length !== 0 &&
+                <div className="paddedObject">
+                    <TextField label="New Message" variant="filled" multiline fullWidth value={newMessage}  
+                               onChange = {handleTyping}
+                               InputProps={{
+                                   endAdornment: <InputAdornment position="end">
+                                        <SendIcon color="primary" className="sendButton" 
+                                                  onClick={() => sendMessage()} />
+                                   </InputAdornment>
+                               }} />
                 </div>
             }
         </div>
