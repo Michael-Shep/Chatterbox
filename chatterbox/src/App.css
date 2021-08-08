@@ -156,3 +156,7 @@ h1 {
 .sendButton {
   cursor: pointer;
 }
+
+.messages {
+  overflow-y: scroll;
+}

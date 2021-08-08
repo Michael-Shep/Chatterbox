@@ -81,9 +81,12 @@ const MessageView = ({ userCredentials, selectedChatObject }) => {
                     <span>Select one of the chats to view messages here</span>
                 </div>
             }
+            {
+                Object.keys(selectedChatObject).length !== 0 &&
+                <h2 className="centerText"> {getMessageReciever(selectedChatObject)} </h2>
+            }
             { Object.keys(selectedChatObject).length !== 0 &&
-                <div className="paddedObject">
-                    <h2 className="centerText"> {getMessageReciever(selectedChatObject)} </h2>
+                <div className="paddedObject messages">
                     {
                         messages.map((message, index) => (
                             <div key={index} className={`${getMessageAlignmentClass(message, true)}`}>
@@ -91,7 +94,6 @@ const MessageView = ({ userCredentials, selectedChatObject }) => {
                             </div>
                         ))
                     }
-
                 </div>
             }
             { Object.keys(selectedChatObject).length !== 0 &&
