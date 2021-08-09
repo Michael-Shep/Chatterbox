@@ -160,4 +160,16 @@ h1 {
 
 .messages {
   overflow-y: scroll;
+  height: 100%;
+}
+
+#newChatButton {
+  width: calc(100% - 50px);
+  text-align: center;
+  padding: 20px;
+  border: 3px solid black;
+  margin-bottom: -3px;
+  cursor: pointer;
+  font-weight: bold;
+  color: blue;
 }

@@ -5,9 +5,12 @@ import 'firebase/firestore';
 
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 
+import NewChatDialog from "./NewChatDialog";
+
 const ChatsList = ({ userCredentials, selectedChatObject, setSelectedChatObject }) => {
     const db = firebase.firestore();
     const [chats, setChats] = useState([]);
+    const [dialogOpen, setDialogOpen] = useState(false);
     const userEmail = userCredentials.email;
 
     useEffect(() => {
@@ -37,6 +40,7 @@ const ChatsList = ({ userCredentials, selectedChatObject, setSelectedChatObject 
 
     return (
         <div className="halfScreenContainer">
+            <div id="newChatButton" onClick={() => setDialogOpen(true)}>Create New Chat</div>
             { chats.map((chat, index) => (
                 <div key={index} 
                     className={`chatDisplay paddedObject ${selectedChatObject === chat ? 'selectedChat': ''}`}
@@ -45,6 +49,7 @@ const ChatsList = ({ userCredentials, selectedChatObject, setSelectedChatObject 
                     <ArrowForwardIosIcon />
                 </div>
             )) }
+            <NewChatDialog dialogOpen={dialogOpen} onClose={() => setDialogOpen(false)} userCredentials={userCredentials} />
         </div>
     );
 };
