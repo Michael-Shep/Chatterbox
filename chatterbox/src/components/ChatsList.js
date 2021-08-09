@@ -14,19 +14,15 @@ const ChatsList = ({ userCredentials, selectedChatObject, setSelectedChatObject 
     const userEmail = userCredentials.email;
 
     useEffect(() => {
-        db.collection("chats").where('participants', 'array-contains', userEmail).get()
-        .then((querySnapshot) => {
+        db.collection("chats").where('participants', 'array-contains', userEmail)
+        .onSnapshot((querySnapshot) => {
             let documents = [];
             querySnapshot.forEach((doc) => {
                 let documentObject = doc.data();
                 documentObject.id = doc.id;
                 documents.push(documentObject);
             });
-            setChats(documents);
-        })
-        .catch((error) => {
-            console.log('Chat data could not be fetched');
-            console.log(error);
+            setChats(prevChats => prevChats.concat(documents));
         });
     }, [db, userEmail]);
 
